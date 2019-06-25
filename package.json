@@ -23,6 +23,5 @@
     "dev": "run-p start:dev autobuild",
     "start": "sirv public --single",
     "start:dev": "sirv public --port 6030 --single --dev "
-  },
-  "svelte": "src/components/components.module.js"
+  }
 }
