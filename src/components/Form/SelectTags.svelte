@@ -66,7 +66,7 @@
         tags=tags;
     }
 
-    $: filteredOptions = options ? options.filter(o=>!tags.includes(o)).filter(o=>o.label.includes(search)).slice(0,10): [];
+    $: filteredOptions = options ? options.filter(o=>!tags.includes(o)).filter(o=>o.label.toLowerCase().includes(search.toLowerCase())).slice(0,10): [];
 
 </script>
 <style>
