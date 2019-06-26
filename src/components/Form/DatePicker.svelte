@@ -100,6 +100,10 @@
 
     .dropdown{
         z-index: 20;
+        width: 100%;
+    }
+    .dropdown-trigger{
+        width: 100%;
     }
 
     .dropdown-content{
@@ -126,12 +130,15 @@
     table{
         width: 100%;
     }
+    .dropdown-button{
+        width: 100%;
+    }
 </style>
 
 
 <div class="dropdown content" class:is-active={visible}>
     <div class="dropdown-trigger" >
-        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+        <button class="button dropdown-button" aria-haspopup="true" aria-controls="dropdown-menu">
             <span class="date-label" on:click={toggleCalendar}>{selectedDateLabel}</span>
             {#if selectedDate}
                 <span class="icon is-small is-right">
