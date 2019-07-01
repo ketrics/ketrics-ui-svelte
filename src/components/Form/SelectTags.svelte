@@ -64,6 +64,7 @@
     const handleRemove = (index)=>{
         tags.splice(index,1);
         tags=tags;
+        value= tags.map(tag=>tag.key);
     }
 
     $: filteredOptions = options ? options.filter(o=>!tags.includes(o)).filter(o=>o.label.toLowerCase().includes(search.toLowerCase())).slice(0,10): [];
