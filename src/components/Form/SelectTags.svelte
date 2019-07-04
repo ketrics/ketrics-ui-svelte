@@ -8,7 +8,7 @@
     const refs = {};
 
     let tags=[];
-    let elementId='SelectTags'+Date.now()
+    let elementId=`SelectTags-${Date.now()}-${Math.random().toString().replace('.','')}`;
 
     const handleSelect = (option)=>{
         search = '';
