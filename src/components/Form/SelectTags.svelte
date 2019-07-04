@@ -8,31 +8,42 @@
     const refs = {};
 
     let tags=[];
+    let elementId='SelectTags'+Date.now()
 
     const handleSelect = (option)=>{
         search = '';
-        tags = [...tags, option]
+        tags = [...tags, option];
         value= tags.map(tag=>tag.key);
+    }
+
+    function handleWindowClick(e){
+        if(visible){
+            if(!(e.target.classList.contains('dropdown-item-'+elementId)
+            || e.target.classList.contains('dropdown-input-trigger-'+elementId))){
+                handleClose()
+            }
+        }
     }
 
     const handleFocus = ()=>{
         visible=true;
         currentIndex = filteredOptions.findIndex(o=>o.key===value);
+        window.addEventListener("click", handleWindowClick);
     }
 
     const handleKeyDown = (event)=>{
         if(event.keyCode===38){
             //Up
-            if(currentIndex-1 < 0)
-                currentIndex = filteredOptions.length;
+            if(currentIndex > 0)
+                currentIndex--;
             else
-                currentIndex = currentIndex-1;
+                currentIndex = filteredOptions.length-1;
         }else if (event.keyCode===40){
             //Down
-            if(currentIndex+1 > filteredOptions.length)
-                currentIndex = 0;
+            if(currentIndex < filteredOptions.length-1)
+                currentIndex++;
             else
-                currentIndex = currentIndex+1;
+                currentIndex = 0;
         }else if (event.keyCode===13){
             //Enter
             if(currentIndex===filteredOptions.length){
@@ -46,11 +57,13 @@
          }else{
             currentIndex=0;
         }
+        console.log(currentIndex, filteredOptions.length)
     }
 
     const handleClose = ()=>{
         refs.input.blur();
         visible=false;
+        window.removeEventListener("click", handleWindowClick);
     }
 
     const handleReset = ()=>{
@@ -66,6 +79,7 @@
         tags=tags;
         value= tags.map(tag=>tag.key);
     }
+
 
     $: filteredOptions = options ? options.filter(o=>!tags.includes(o)).filter(o=>o.label.toLowerCase().includes(search.toLowerCase())).slice(0,10): [];
 
@@ -90,10 +104,11 @@
     }
 </style>
 
+
 <div class="dropdown is-active">
     <div class="dropdown-trigger">
         <p class="control has-icons-right">
-            <input class="input" type="text" placeholder={placeholder} bind:value={search}
+            <input class="input dropdown-input-trigger-{elementId}" type="text" placeholder={placeholder} bind:value={search}
                    on:focus={handleFocus}
                    on:keydown={handleKeyDown}
                    bind:this={refs.input}
@@ -117,19 +132,13 @@
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
                 {#each filteredOptions as option, optionIndex}
-                    <a href="javascript:void(0);" class="dropdown-item"
+                    <a href="javascript:void(0);" class="dropdown-item dropdown-item-{elementId}"
                        on:click={()=>handleSelect(option)}
                        class:current-option={currentIndex===optionIndex}
                     >
                         {option.label}
                     </a>
                 {/each}
-                <a href="javascript:void(0);" class="dropdown-item"
-                   on:click={handleClose}
-                   class:current-option={currentIndex===filteredOptions.length}
-                >
-                    <b>Close</b>
-                </a>
             </div>
         </div>
     {/if}
