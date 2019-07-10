@@ -59,7 +59,7 @@
         search='';
     }
 
-    $: filteredOptions = options.filter(o=>o.label.includes(search)).slice(0,10);
+    $: filteredOptions = options.filter(o=>o.label.toLowerCase().includes(search.toLowerCase())).slice(0,10);
 
 </script>
 <style>
