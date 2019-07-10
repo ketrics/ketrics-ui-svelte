@@ -1,4 +1,6 @@
 <script >
+    import {onMount} from 'svelte';
+
     export let value;
     export let placeholder='';
     export let options = [];
@@ -7,18 +9,25 @@
     let currentIndex=0;
     const refs = {};
 
-    const handleSelect = (option)=>{
+    onMount(()=>{
+        const option = options.find(o=>o.key.toLowerCase()===value.toLowerCase());
+        if(option){
+            handleSelect(option);
+        }
+    })
+
+    function handleSelect(option){
         value = option.key;
         search = option.label;
         visible = false;
     }
 
-    const handleFocus = ()=>{
+    function handleFocus(){
         visible=true;
         currentIndex = filteredOptions.findIndex(o=>o.key===value);
     }
 
-    const handleKeyDown = (event)=>{
+    function handleKeyDown(event){
         if(event.keyCode===38){
             //Up
             if(currentIndex-1 < 0)
@@ -41,18 +50,24 @@
             }
         }else if (event.keyCode===27){
              //Esc
-             handleClose();
+             const option = options.find(o=>o.key.toLowerCase()===search.toLowerCase());
+             if(option){
+                 handleSelect(option);
+             }else{
+                 handleReset();
+             }
+
          }else{
             currentIndex=0;
         }
     }
 
-    const handleClose = ()=>{
+    function handleClose(){
         refs.input.blur();
         visible=false;
     }
 
-    const handleReset = ()=>{
+    function handleReset(){
         refs.input.blur();
         value='';
         visible='';
