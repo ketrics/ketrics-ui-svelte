@@ -175,11 +175,11 @@
             <table class="datepicker-calendar">
                 <thead>
                     <tr>
-                        <th class="cursor-pointer" on:click={()=>goTo(-1)}>
+                        <th class="cursor-pointer {elementId}" on:click={()=>goTo(-1)}>
                             <i class="fas fa-angle-left {elementId}"></i>
                         </th>
                         <th colspan="5" align="center">{currentMonthLabel}-{currentCalendarMonth.year()}</th>
-                        <th class="cursor-pointer" on:click={()=>goTo(1)}>
+                        <th class="cursor-pointer {elementId}" on:click={()=>goTo(1)}>
                             <i class="fas fa-angle-right {elementId}"></i>
                         </th>
                     </tr>
