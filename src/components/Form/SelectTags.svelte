@@ -94,10 +94,6 @@
     .tag{
         margin-right: 5px;
     }
-    .dropdown{
-        max-width: 300px;
-    }
-
     p.control{
         margin-bottom: 0!important;
     }
