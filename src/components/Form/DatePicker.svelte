@@ -30,6 +30,7 @@
     let selectedDate;
     let currentCalendarMonth = moment().startOf("month");
     let calendar = [];
+    let elementId=`DatePicker-${Date.now()}-${Math.random().toString().replace('.','')}`;
 
     onMount(()=>{
         if(value){
@@ -39,27 +40,46 @@
         }
     })
 
-    const updateValue = ()=>{
+    function handleWindowClick(e){
+        if(visible){
+            console.log(e.target)
+            if(!e.target.classList.contains(elementId)){
+                handleClose()
+            }
+        }
+    }
+
+    function handleClose(){
+        visible=false;
+        window.removeEventListener("click", handleWindowClick);
+    }
+
+    function handleOpen(){
+        visible = true;
+        currentCalendarMonth = selectedDate ? selectedDate.clone().startOf("month"): moment().startOf("month");
+        updateCalendar();
+        window.addEventListener("click", handleWindowClick);
+    }
+
+    function updateValue(){
         if(selectedDate)
             value = selectedDate.format('YYYY-MM-DD');
     }
 
-    const toggleCalendar = ()=>{
+    function toggleCalendar(){
         if(visible){
-            visible = false;
+            handleClose()
         }else{
-            visible = true;
-            currentCalendarMonth = selectedDate ? selectedDate.clone().startOf("month"): moment().startOf("month");
-            updateCalendar();
+            handleOpen()
         }
     }
 
-    const goTo = index=>{
+    function goTo(index){
         currentCalendarMonth = currentCalendarMonth.add(index, 'months').startOf('month');
         updateCalendar();
     }
 
-    const updateCalendar = ()=>{
+    function updateCalendar(){
         const firstWeek = currentCalendarMonth.isoWeek();
         const numberOfDaysInMonth = parseInt(currentCalendarMonth.clone().endOf('month').format('DD'));
         const firstWeekDayOfMonth = currentCalendarMonth.isoWeekday();
@@ -74,17 +94,17 @@
         calendar = cal;
     }
 
-    const handleReset = ()=>{
+    function handleReset(){
         selectedDate = null;
         value = '';
-        visible = false;
+        handleClose();
     }
 
-    const selectDate = (date)=>{
+    function selectDate(date){
         selectedDate = date;
         currentCalendarMonth = date.clone().startOf("month");
         updateValue();
-        visible=false;
+        handleClose();
     }
 
     $: currentMonthLabel = currentCalendarMonth ? months[lang][currentCalendarMonth.month()].label : '';
@@ -139,10 +159,10 @@
 <div class="dropdown content" class:is-active={visible}>
     <div class="dropdown-trigger" >
         <button class="button dropdown-button" aria-haspopup="true" aria-controls="dropdown-menu">
-            <span class="date-label" on:click={toggleCalendar}>{selectedDateLabel}</span>
+            <span class="date-label {elementId}" on:click={toggleCalendar}>{selectedDateLabel}</span>
             {#if selectedDate}
                 <span class="icon is-small is-right">
-                    <button class="delete is-small" on:click={handleReset}></button>
+                    <button class="delete is-small {elementId}" on:click={handleReset}></button>
                 </span>
             {:else}
                 <span class="icon is-small">
@@ -157,11 +177,11 @@
                 <thead>
                     <tr>
                         <th class="cursor-pointer" on:click={()=>goTo(-1)}>
-                            <i class="fas fa-angle-left"></i>
+                            <i class="fas fa-angle-left {elementId}"></i>
                         </th>
                         <th colspan="5" align="center">{currentMonthLabel}-{currentCalendarMonth.year()}</th>
                         <th class="cursor-pointer" on:click={()=>goTo(1)}>
-                            <i class="fas fa-angle-right"></i>
+                            <i class="fas fa-angle-right {elementId}"></i>
                         </th>
                     </tr>
                     <tr>
@@ -175,7 +195,7 @@
                         <tr>
                             {#each week.days as day, dayIndex}
                                 {#if currentCalendarMonth.month()===day.month()}
-                                    <td class="cursor-pointer" on:click={()=>selectDate(day)}
+                                    <td class="cursor-pointer {elementId}" on:click={()=>selectDate(day)}
                                         class:selected-date={selectedDate && day.format(format)===selectedDate.format(format)}
                                     >
                                         {day.format('DD')}
@@ -190,9 +210,9 @@
                         </tr>
                     {/each}
                     <tr>
-                        <th colspan="3" class="cursor-pointer" on:click={handleReset} align="center">Clear</th>
+                        <th colspan="3" class="cursor-pointer {elementId}" on:click={handleReset} align="center">Clear</th>
                         <th></th>
-                        <th colspan="3" class="cursor-pointer" on:click={toggleCalendar} align="center">
+                        <th colspan="3" class="cursor-pointer {elementId}" on:click={handleClose} align="center">
                             Close
                         </th>
                     </tr>

@@ -57,20 +57,19 @@
          }else{
             currentIndex=0;
         }
-        console.log(currentIndex, filteredOptions.length)
     }
 
     const handleClose = ()=>{
-        refs.input.blur();
+        if(refs.input)
+            refs.input.blur();
         visible=false;
         window.removeEventListener("click", handleWindowClick);
     }
 
     const handleReset = ()=>{
-        refs.input.blur();
+        handleClose();
         tags = [];
         value=[];
-        visible=false;
         search='';
     }
 
