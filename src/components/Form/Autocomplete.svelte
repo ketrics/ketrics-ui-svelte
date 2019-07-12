@@ -11,7 +11,7 @@
 
     onMount(()=>{
         if(value){
-            const option = options.find(o=>o.key.toLowerCase()===value.toLowerCase());
+            const option = options.find(o=>o.key.toString().toLowerCase()===value.toString().toLowerCase());
             if(option){
                 handleSelect(option);
             }
@@ -26,7 +26,7 @@
 
     function handleFocus(){
         visible=true;
-        currentIndex = filteredOptions.findIndex(o=>o.key===value);
+        currentIndex = filteredOptions.findIndex(o=>o.key.toString().toLowerCase()===value.toString().toLowerCase());
     }
 
     function handleKeyDown(event){
@@ -48,11 +48,12 @@
                 handleReset();
             }else{
                 handleSelect(filteredOptions[currentIndex]);
-                refs.input.blur();
+                if(refs.input)
+                    refs.input.blur();
             }
         }else if (event.keyCode===27){
              //Esc
-             const option = options.find(o=>o.key.toLowerCase()===search.toLowerCase());
+             const option = options.find(o=>o.key.toString().toLowerCase()===search.toString().toLowerCase());
              if(option){
                  handleSelect(option);
              }else{
@@ -65,12 +66,14 @@
     }
 
     function handleClose(){
-        refs.input.blur();
+        if(refs.input)
+            refs.input.blur();
         visible=false;
     }
 
     function handleReset(){
-        refs.input.blur();
+        if(refs.input)
+            refs.input.blur();
         value='';
         visible='';
         search='';
