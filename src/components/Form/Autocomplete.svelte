@@ -10,9 +10,11 @@
     const refs = {};
 
     onMount(()=>{
-        const option = options.find(o=>o.key.toLowerCase()===value.toLowerCase());
-        if(option){
-            handleSelect(option);
+        if(value){
+            const option = options.find(o=>o.key.toLowerCase()===value.toLowerCase());
+            if(option){
+                handleSelect(option);
+            }
         }
     })
 
