@@ -93,7 +93,6 @@
         let _options=[];
         if(options){
             _options = options.filter(option=>!tags.map(tag=>tag.key).includes(option.key))
-            console.log(_options);
             _options = _options.filter(option=>option.label.toLowerCase().includes(search.toLowerCase())).slice(0,10);
         }
         return _options;
