@@ -89,17 +89,18 @@
         value= tags.map(tag=>tag.key);
     }
 
-    function getFilteredOptions(options){
+    function getFilteredOptions(options, search){
         let _options=[];
         if(options){
             _options = options.filter(option=>!tags.map(tag=>tag.key).includes(option.key))
-                .filter(option=>option.label.toLowerCase().includes(search.toLowerCase())).slice(0,10);
+            console.log(_options);
+            _options = _options.filter(option=>option.label.toLowerCase().includes(search.toLowerCase())).slice(0,10);
         }
         return _options;
     }
 
 
-    $: filteredOptions = getFilteredOptions(options);
+    $: filteredOptions = getFilteredOptions(options, search);
 
 </script>
 <style>
@@ -137,6 +138,7 @@
         justify-content: flex-start;
         line-height: 1.5;
         position: relative;
+        margin-top: 0;
     }
 
     .input-search {
